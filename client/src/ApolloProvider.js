@@ -11,11 +11,14 @@ const httpLink = createHttpLink({
 const authLink = setContext(() => {
   const token = localStorage.getItem('jwtToken');
   return {
-    Authorization: token ? `Bearer ${ token }` : ''
+    headers: {
+      Authorization: token ? `Bearer ${ token }` : ''
+    }
   }
 })
 
 const client = new ApolloClient({
+  // successfully sends protected API calls by adding authLink to httpLink
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 })

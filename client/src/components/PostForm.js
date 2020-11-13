@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 
 import { useForm } from '../utils/hooks';
+import { FETCH_POSTS_QUERY } from '../utils/graphql';
 
 export default function PostForm() {
 
@@ -12,13 +13,17 @@ export default function PostForm() {
   })
 
   const [createPost, { error }] = useMutation(CREATE_POST, {
-    update(_, result) {
+    variables: values,
+    update(proxy, result) {
       console.log(result);
+      // fetch posts from client data in cache. all the data in our cache is in our data variable now. you can view the cache using apollo dev tools
+      const data = proxy.readQuery({
+        query: FETCH_POSTS_QUERY
+      })
+      // to update the cache
+      proxy.writeQuery({ query: FETCH_POSTS_QUERY, data: { getPosts: [result.data.createPost, ...data.getPosts]} })
       values.body = '';
     },
-    variables: {
-      body: values.body
-    }
   })
 
   function createPostCallback() {
