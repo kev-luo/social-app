@@ -58,6 +58,11 @@ module.exports = {
       } catch(err) {
         throw new Error(err);
       }
+    },
+    async likePost(_, { postId }, context) {
+      const user = checkAuth(context);
+
+      
     }
   }
 }
