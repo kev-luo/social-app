@@ -30,6 +30,10 @@ module.exports = {
     async createPost(_, { body }, context) {
       const user = checkAuth(context);
       console.log(user);
+
+      if(body.trim() === '') {
+        throw new Error('Post body must not be empty');
+      }
       // if we get to this point that means the user is authenticated
       const newPost = new Post({
         body,
