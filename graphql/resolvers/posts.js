@@ -40,6 +40,11 @@ module.exports = {
 
       const post = await newPost.save();
 
+      // return new post. applies to subscription type
+      context.pubsub.publish('NEW_POST', {
+        newPost: post
+      })
+
       return post;
     },
     async deletePost(_, { postId }, context) {
@@ -71,8 +76,8 @@ module.exports = {
           post.likes = post.likes.filter(like => like.username !== user.username);
         } else {
           // if we haven't liked the post, then like it
-          post.likes = post.likes.push({
-            username,
+          post.likes.push({
+            username: user.username,
             createdAt: new Date().toISOString()
           })
         }
@@ -80,6 +85,13 @@ module.exports = {
         await post.save();
         return post;
       } else throw new UserInputError('Post not found');
+    }
+  },
+  Subscription: {
+    newPost: {
+      // array function version
+      // all caps is convention for this 'event type thing'
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('NEW_POST')
     }
   }
 }
