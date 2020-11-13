@@ -8,7 +8,9 @@ const resolvers = require('./graphql/resolvers');
 // setup apollo server
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  // callback. this is middleware so we get the req/res from express and then forward it to the context, which we can then access in graphql posts resolver 
+  context: ({ req }) => ({ req })
 })
 
 mongoose

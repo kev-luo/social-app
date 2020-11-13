@@ -22,11 +22,14 @@ module.exports = gql`
   }
   type Query {
     getPosts: [Post]
+    getPost(postId: ID!): Post
   }
   type Mutation {
     # registerInput is the argument of register(). RegisterInput is defined above. it's an input type
     register(registerInput: RegisterInput): User!,
     # this doesn't need a type because it only takes two things
     login(username: String!, password: String!): User!
+    createPost(body: String!): Post!
+    deletePost(postId: ID!): String!
   }
 `
