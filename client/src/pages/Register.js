@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { Form, Button } from 'semantic-ui-react';
 
 import { useForm } from '../utils/hooks';
+import { AuthContext } from '../context/auth';
 
 export default function Register(props) {
+  const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
 
   const initialState = {
@@ -22,6 +24,7 @@ export default function Register(props) {
     // update is triggered if the mutation is successfully executed
     update(_, result) {
       console.log(result)
+      context.login(result.data.register);
       // redirect to homepage after successfully executing mutation
       props.history.push('/');
     },
