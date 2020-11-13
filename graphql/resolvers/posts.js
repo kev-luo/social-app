@@ -6,6 +6,7 @@ const checkAuth = require('../../utils/check-auth');
 module.exports = {
   Query: {
     async getPosts() {
+      console.log('get posts');
       try {
         const posts = await Post.find({}).sort({ createdAt: -1 });
         return posts;
@@ -28,6 +29,7 @@ module.exports = {
   },
   Mutation: {
     async createPost(_, { body }, context) {
+      console.log('create post');
       const user = checkAuth(context);
       console.log(user);
 
@@ -52,6 +54,7 @@ module.exports = {
       return post;
     },
     async deletePost(_, { postId }, context) {
+      console.log('delete post');
       const user = checkAuth(context);
 
       // we need to check that the user is deleting their own post
@@ -70,6 +73,7 @@ module.exports = {
     },
     // toggles liking/unliking post
     async likePost(_, { postId }, context) {
+      console.log('like post');
       const user = checkAuth(context);
 
       const post = await Post.findById(postId);

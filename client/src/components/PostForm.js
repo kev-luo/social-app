@@ -14,6 +14,9 @@ export default function PostForm() {
 
   const [createPost, { error }] = useMutation(CREATE_POST, {
     variables: values,
+    onError(err) {
+      console.log(err.graphQLErrors);
+    },
     update(proxy, result) {
       console.log(result);
       // fetch posts from client data in cache. all the data in our cache is in our data variable now. you can view the cache using apollo dev tools
@@ -31,20 +34,30 @@ export default function PostForm() {
   }
 
   return(
-    <Form onSubmit={ onSubmit }>
-      <h2>Create a Post</h2>
-      <Form.Field>
-        <Form.Input
-          placeholder="Ping"
-          name="body"
-          onChange={ onChange }
-          value={ values.body }
-        />
-        <Button type="submit" color="teal">
-          Submit
-        </Button>
-      </Form.Field>
-    </Form>
+    <>
+      <Form onSubmit={ onSubmit }>
+        <h2>Create a Post</h2>
+        <Form.Field>
+          <Form.Input
+            placeholder="Ping"
+            name="body"
+            onChange={ onChange }
+            value={ values.body }
+            error={ error ? true : false }
+          />
+          <Button type="submit" color="teal">
+            Submit
+          </Button>
+        </Form.Field>
+      </Form>
+      {error && (
+        <div className="ui error message" style={{ marginBottom: '20px' }}>
+          <ul className="list">
+            <li>{ error.graphQLErrors[0].message }</li>
+          </ul>
+        </div>
+      )}
+    </>
   )
 }
 
