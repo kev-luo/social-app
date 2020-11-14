@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
-import { Card, Image, Button } from 'semantic-ui-react';
 import moment from 'moment'
 import { Link } from 'react-router-dom';
+import { Card, Image, Button } from 'semantic-ui-react';
 
 import { AuthContext } from '../context/auth';
 import LikeButton from './LikeButton';
+import DeleteButton from './DeleteButton';
 
 export default function PostCard({post: { body, createdAt, id, username, likeCount, commentCount, likes } }) {
   const context = useContext(AuthContext);
@@ -35,15 +36,7 @@ export default function PostCard({post: { body, createdAt, id, username, likeCou
           as={ Link }
           to={ `/posts/${ id }` }
         />
-        { context.user && context.user.username === username && (
-          <Button
-            color="red"
-            as="div"
-            onClick={ () => console.log('Delete Post') }
-            icon="trash"
-            floated="right"
-          />
-        )}
+        { context.user && context.user.username === username && <DeleteButton postId={ id } /> }
       </Card.Content>
     </Card>
   )
