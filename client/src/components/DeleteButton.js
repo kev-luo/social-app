@@ -6,15 +6,27 @@ import { Button, Confirm } from 'semantic-ui-react';
 
 import { FETCH_POSTS_QUERY } from '../utils/graphql';
 
-export default function DeleteButton({ postId }) {
+export default function DeleteButton({ postId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     // remember that when we reach update that means the post has been successfully deleted
-    update(proxy, result) {
+    update(proxy) {
       setConfirmOpen(false);
-      // TODO: remove post from cache so that the change is reflecetd on the front end so that we don't have to fetch the posts again
-      
+      // remove post from cache so that the change is reflecetd on the front end so that we don't have to fetch the posts again
+      const data = proxy.readQuery({
+        query: FETCH_POSTS_QUERY
+      })
+      proxy.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: data.getPosts.filter(post => post.id !== postId)
+        }
+      })
+      // we need to check if there's a callback since we only pass one if we're deleting a post from the singlepost page, not if we're on the home page
+      if(callback) {
+        callback();
+      }
     },
     variables: {
       postId: postId

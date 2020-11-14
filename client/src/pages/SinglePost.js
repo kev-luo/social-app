@@ -19,6 +19,10 @@ export default function SinglePost(props) {
     }
   })
 
+  function deletePostCb() {
+    props.history.push('/');
+  }
+
   let postMarkup
   if(loading) {
     // optionally add spinner to represent loading
@@ -54,7 +58,7 @@ export default function SinglePost(props) {
                   basic
                 />
                 { context.user && context.user.username === username && (
-                  <DeleteButton postId={ id } />
+                  <DeleteButton postId={ id } callback={ deletePostCb }/>
                 )}
               </Card.Content>
             </Card>
