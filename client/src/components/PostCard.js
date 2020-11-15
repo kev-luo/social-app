@@ -6,13 +6,10 @@ import { Card, Image, Button } from 'semantic-ui-react';
 import { AuthContext } from '../context/auth';
 import LikeButton from './LikeButton';
 import DeleteButton from './DeleteButton';
+import MyPopup from '../utils/MyPopup';
 
 export default function PostCard({post: { body, createdAt, id, username, likeCount, commentCount, likes } }) {
   const context = useContext(AuthContext);
-
-  const likePost = () => {
-    console.log(likeCount);
-  }
 
   return (
     <Card fluid>
@@ -28,14 +25,17 @@ export default function PostCard({post: { body, createdAt, id, username, likeCou
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={ context.user } post={{ id, likes, likeCount }} />
-        <Button
-          color='blue'
-          icon='comments'
-          label={{ basic: true, color: 'blue', pointing: 'left', content: commentCount }}
-          basic
-          as={ Link }
-          to={ `/posts/${ id }` }
-        />
+        {/* TODO: perhaps make separate comment button component */}
+        <MyPopup content="Comment on post">
+          <Button
+            color='blue'
+            icon='comments'
+            label={{ basic: true, color: 'blue', pointing: 'left', content: commentCount }}
+            basic
+            as={ Link }
+            to={ `/posts/${ id }` }
+          /> 
+        </MyPopup>
         { context.user && context.user.username === username && <DeleteButton postId={ id } /> }
       </Card.Content>
     </Card>

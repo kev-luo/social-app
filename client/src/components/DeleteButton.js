@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { Button, Confirm } from 'semantic-ui-react';
 
 import { FETCH_POSTS_QUERY } from '../utils/graphql';
+import MyPopup from '../utils/MyPopup';
 
 export default function DeleteButton({ postId, commentId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -40,13 +41,15 @@ export default function DeleteButton({ postId, commentId, callback }) {
 
   return (
     <>
-      <Button
-        color="red"
-        as="div"
-        onClick={ () => setConfirmOpen(true) }
-        icon="trash"
-        floated="right"
-      />
+      <MyPopup content={ commentId ? 'Delete comment' : 'Delete post' }>
+        <Button
+          color="red"
+          as="div"
+          onClick={ () => setConfirmOpen(true) }
+          icon="trash"
+          floated="right"
+        />
+      </MyPopup>
       {/* we want to show a modal before the user actually gets to delete the post */}
       <Confirm
         open={ confirmOpen }
