@@ -29,7 +29,6 @@ export default function SinglePost(props) {
     postMarkup = <p>Loading post...</p>
   } else {
     const { id, body, createdAt, username, comments, likes, likeCount, commentCount } = data.getPost;
-    console.log(comments);
 
     postMarkup = (
       <Grid>
