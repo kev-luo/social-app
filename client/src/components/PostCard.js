@@ -23,8 +23,8 @@ export default function PostCard({post: { body, createdAt, id, username, likeCou
           src='https://react.semantic-ui.com/images/avatar/large/molly.png'
         />
         <Card.Header>{ username }</Card.Header>
-        <Card.Meta as={ Link } to={`/posts/${ id }`}>{moment(createdAt).fromNow()}</Card.Meta>
-        <Card.Description>{ body }</Card.Description>
+        <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
+        <Card.Description as={ Link } to={`/posts/${ id }`}>{ body }</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={ context.user } post={{ id, likes, likeCount }} />

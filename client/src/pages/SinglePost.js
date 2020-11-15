@@ -29,6 +29,7 @@ export default function SinglePost(props) {
     postMarkup = <p>Loading post...</p>
   } else {
     const { id, body, createdAt, username, comments, likes, likeCount, commentCount } = data.getPost;
+    console.log(comments);
 
     postMarkup = (
       <Grid>
@@ -51,6 +52,7 @@ export default function SinglePost(props) {
               <Card.Content extra>
                 <LikeButton user={context.user} post={{ id, likeCount, likes }}/>
                 <Button 
+                  color='blue'
                   as="div" 
                   icon="comments"
                   onClick={() => console.log('Comment on post')}
@@ -62,6 +64,21 @@ export default function SinglePost(props) {
                 )}
               </Card.Content>
             </Card>
+            {/* TODO: look into separating comments into it's own component */}
+            {comments.map(comment => {
+              return(
+                <Card fluid key={comment.id}>
+                  <Card.Content>
+                    { context.user && context.user.username === comment.username && 
+                      (<DeleteButton postId={ id } commentId={ comment.id } />
+                      )}
+                    <Card.Header>{ comment.username }</Card.Header>
+                    <Card.Meta> { moment(comment.createdAt).fromNow() }</Card.Meta>
+                    <Card.Description>{ comment.body }</Card.Description>
+                  </Card.Content>
+                </Card>
+              )
+            })}
           </Grid.Column>
         </Grid.Row>
       </Grid>
